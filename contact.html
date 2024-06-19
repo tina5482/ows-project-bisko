@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="style_contact.css">
+    <link href="https://fonts.google.com/specimen/Bodoni+Moda?preview.text=BEAUTY%20ISABELLA&stroke=Serif">
+</head>
+
+<body>
+    <div id="page">
+    <header id="header" class="header">
+        <div class="menu-button">
+                        <a href="#" class="dropbtn">
+                        </a>
+                        <button class="navbar-toggle" id="navbar-toggle">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                </div>
+                <div class="sidebar" id="sidebar">
+                        <button class="close-btn" id="close-btn">&times;></button>
+                        <ul class="side-menu">
+                            <li class="sidebar-item"><a href="index.html">Početna</a></li>
+                            <li class="sidebar-item"><a href="about.html">O meni</a></li>
+                            <li class="sidebar-item"><a href="gallery.html">Galerija</a></li>
+                        </ul>
+                </div>
+                <div class="spacer"></div>
+                <div class="company-name">
+                    <img class="svg-icon" src="svg/Isabella.svg" alt="SVG Icon">
+                </div>
+                <div class="spacer"></div>
+    </header>
+    <div class="container_contact">
+        <main>
+        <div id="left" class="left">
+            <div class="left-centar">
+            <h2>Kontakt i lokacija</h2>
+            <p>Ulica Pere Perića 2, Sukošan</p>
+            <p>+385 99 123 4567</p>
+            <p>beauty.isabella@gmail.com</p>
+            <a href="https://www.instagram.com/beauty.isabellla?igsh=MW1tNTN5YzBnc2pwMw==">@beauty.isabellla</a>
+            <h2>Radno vrijeme</h2>
+            <p>Pon - Pet: 08:00 - 20:00h // Sub: 08:00 - 14:00h</p>
+            <h2>Rezervacija termina</h2>
+            <p class="long-text">Kako biste se naručili na željeni tretman tretman i provjerili dostupnost termina, molimo na nas kontaktirate direktno na telefon ili pošaljite poruku putem upita</p>
+        </div>
+        </div>
+
+        <div id="right" class="right">
+        <div class="obrub">
+            <div id="form-obrub">
+                <p class="left">Za sve dodatne upite molim kontaktirajte me putem forme </p>
+                <form id="contactForm">
+                    <input type="text" id="name" name="name" placeholder="Name" required><br><br>
+                    <input type="email" id="email" name="email" placeholder="Email" required><br><br>
+                    <textarea id="message" name="message" placeholder="Message" required></textarea><br><br>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <div id="msg-txt"  style="display: none;">
+                <p style="padding: 5px;">Hvala Vam na poruci. Javit ćemo Vam se u najkraćem mogućem roku.</p>
+                <button id="natrag-button" type="button">Natrag</button>
+            </div>
+        </div>
+        </div>
+        </main>
+    </div>
+
+<footer>
+    <p>&copy; 2024 Biško. All rights reserved.</p>
+  </footer>
+    </div>
+    <script src="keys-navigation.js"></script>
+  <script src="java_contact.js"></script>
+</body>
+  </html>
