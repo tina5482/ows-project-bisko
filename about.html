@@ -1,91 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Website</title>
-    <link rel="stylesheet" href="style_about.css" />
-    <link href="https://fonts.google.com/specimen/Bodoni+Moda?preview.text=BEAUTY%20ISABELLA&stroke=Serif">
-  </head>
-  <body>
-    <div id="page">
-        <header id="header" class="header">
-          <div class="menu-button">
-                    <a href="#" class="navbar-brand">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isabella</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="about.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Header -->
+        <nav class="navbar custom-header" role="navigation" aria-label="main navigation">
+
+            <div class="navbar-brand">
+                <div>
+                    <a id="brand-icon" class="navbar-item" href="index.html">
+                        <img src="svg/Isabella.svg" alt="Beauty Isabella"> <!-- Replace with your SVG path -->
                     </a>
-                    <button class="navbar-toggle" id="navbar-toggle">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 6H20M4 12H20M4 18H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
                 </div>
-            <div class="sidebar" id="sidebar">
-                <button class="close-btn" id="close-btn">&times;></button>
-                <ul class="side-menu">
-                    <li class="sidebar-item"><a href="index.html">Početna</a></li>
-                    <li class="sidebar-item"><a href="gallery.html">Galerija</a></li>
-                    <li class="sidebar-item"><a href="contact.html">Kontakt</a></li>
-                </ul>
+                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
+                    data-target="navbarBasicExample">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
             </div>
-            <div class="spacer"></div>
-            <div class="company-name">
-              <img class="svg-icon" src="svg/Isabella.svg" alt="SVG Icon">
+            <div id="navbarBasicExample" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="index.html">Početna</a>
+                    <a class="navbar-item" href="about.html">O meni</a>
+                    <a class="navbar-item" href="gallery.html">Galerija</a>
+                    <a class="navbar-item" href="contact.html">Kontakt</a>
+                </div>
             </div>
-            <div class="spacer"></div>
-      </header>
-      <h1>Upoznaj naš tim</h1>
-      <div class="main-container">
-        <div class="team">
-            <div class="spacer">
-            </div>
-            <div class="member">
-              <img src="slike_projekt/edukacija2.jpg">
-              <h4>Isabella Kustura</h4>
-              <p class="text">
-                Isabella Kustura je certificirana makeup vizažistica, specijalizirana je za profesionalni
-                makeup za sve prigode, od vjenčanja i maturalnih večeri do modnih revija 
-                i fotosnimanja. Isabella je poznata po svojoj pažnji prema detaljima i 
-                sposobnosti da istakne prirodnu ljepotu svojih klijenata. Osim makeupa, 
-                Isabella nudi i usluge nadogradnje trepavica te podizanja obrva i trepavica,
-                koristeći najnovije tehnike i visokokvalitetne proizvode kako bi osigurala 
-                dugotrajan i besprijekoran izgled.</p>
-            </div>
-            <div class="seperate"></div>
-            <div class="member">
-              <img src="slike_projekt/edukacija2.jpg">
-              <h4>Petra Marić</h4>
-              <p class="text">
-                Petra Marić je certificirana makeup umjetnica i nail artist s izvanrednim talentom 
-                i strasti prema ljepoti. Petra pruža širok spektar usluga 
-                uključujući sve vrste manikura te ugradnju noktiju i gel kao i prekrasan nail art koji će zasigurno privući poglede.
-                Njena posvećenost zadovoljstvu klijenata i korištenje 
-                najnovijih tehnika i proizvoda čine je jednom od najtraženijih umjetnica u regiji. 
-                Petra se ističe po svom personaliziranom pristupu svakom klijentu, osiguravajući da svaki
-                izgled bude jedinstven i prilagođen individualnim potrebama i željama.</p>
-            </div>
-            <div class="spacer">
-            </div>
-          </div>
-          <h1>Naši certifikati</h1>
-        <div class="certificate">
-          <div class="imgbox">
-          <img src="slike_projekt/edukacija1.jpg" alt="foto1">
-          <img src="slike_projekt/edukacija2.jpg" alt="foto2">
-          <img src="slike_projekt/edukacija3.jpg" alt="foto3">
-          <img src="slike_projekt/edukacija4.jpg" alt="foto4">
-          <img src="slike_projekt/edukacija1.jpg" alt="foto1">
-          <img src="slike_projekt/edukacija2.jpg" alt="foto2">
-          <img src="slike_projekt/edukacija3.jpg" alt="foto3">
-          <img src="slike_projekt/edukacija4.jpg" alt="foto4">
-          </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <section class="section">
+                <h1 class="title">Upoznaj naš tim</h1>
+                <div class="container">
+
+                </div>
+                <div class="columns is-multiline">
+                    <div class="column is-half">
+                        <div class="card-image center-container">
+                            <figure class="image is-rounded">
+                                <img src="slike/edukacija2.jpg" alt="Edukacija 1" class="edukacija-img  is-rounded">
+                            </figure>
+                            <h4>Isabella Kustura</h4>
+                            <p class="text">
+                                Isabella Kustura je certificirana makeup vizažistica, specijalizirana je za
+                                profesionalni
+                                makeup za sve prigode, od vjenčanja i maturalnih večeri do modnih revija
+                                i fotosnimanja. Isabella je poznata po svojoj pažnji prema detaljima i
+                                sposobnosti da istakne prirodnu ljepotu svojih klijenata. Osim makeupa,
+                                Isabella nudi i usluge nadogradnje trepavica te podizanja obrva i trepavica,
+                                koristeći najnovije tehnike i visokokvalitetne proizvode kako bi osigurala
+                                dugotrajan i besprijekoran izgled.</p>
+                        </div>
+                    </div>
+                    <div class="column is-half">
+                        <div class="card-image center-container">
+                            <figure class="image is-rounded">
+                                <img id="ed1" src="slike/edukacija2.jpg" alt="Edukacija 2"
+                                    class="edukacija-img  is-rounded">
+                            </figure>
+                            <h4>Petra Marić</h4>
+                            <p class="text">
+                                Petra Marić je certificirana makeup umjetnica i nail artist s izvanrednim talentom
+                                i strasti prema ljepoti. Petra pruža širok spektar usluga
+                                uključujući sve vrste manikura te ugradnju noktiju i gel kao i prekrasan nail art koji
+                                će zasigurno privući
+                                poglede.
+                                Njena posvećenost zadovoljstvu klijenata i korištenje
+                                najnovijih tehnika i proizvoda čine je jednom od najtraženijih umjetnica u regiji.
+                                Petra se ističe po svom personaliziranom pristupu svakom klijentu, osiguravajući da
+                                svaki
+                                izgled bude jedinstven i prilagođen individualnim potrebama i željama.</p>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="columns is-multiline">
+                    <div class="column">
+                        <div class="card-image center-container">
+                            <h1 class="title">Naši certifikati</h1>
+                            <div class="container-scroll">
+                                <div class="scrollable-box">
+                                    <img src="slike/edukacija1.jpg" alt="foto1">
+                                    <img src="slike/edukacija2.jpg" alt="foto2">
+                                    <img src="slike/edukacija3.jpg" alt="foto3">
+                                    <img src="slike/edukacija4.jpg" alt="foto4">
+                                    <img src="slike/edukacija1.jpg" alt="foto1">
+                                    <img src="slike/edukacija2.jpg" alt="foto2">
+                                    <img src="slike/edukacija3.jpg" alt="foto3">
+                                    <img src="slike/edukacija4.jpg" alt="foto4">
+                                    <img src="slike/edukacija1.jpg" alt="foto1">
+                                    <img src="slike/edukacija2.jpg" alt="foto2">
+                                    <img src="slike/edukacija3.jpg" alt="foto3">
+                                    <img src="slike/edukacija4.jpg" alt="foto4">
+                                    <img src="slike/edukacija1.jpg" alt="foto1">
+                                    <img src="slike/edukacija2.jpg" alt="foto2">
+                                    <img src="slike/edukacija3.jpg" alt="foto3">
+                                    <img src="slike/edukacija4.jpg" alt="foto4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
 
-      </div>
-      <footer>
-        <p1>&copy; 2024 Biško. All rights reserved.</p1>
-      </footer>
+        <!-- Footer -->
+        <footer class="footer thin-footer">
+            <div class="has-text-centered">
+                <p>&copy; 2024 Biško. All rights reserved.</p>
+            </div>
+        </footer>
     </div>
-    <script src="keys-navigation.js"></script>
-    <script src="java_about.js"></script>
-  </body>
+
+    <script src="index.js"></script>
+</body>
+
 </html>

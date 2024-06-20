@@ -1,226 +1,147 @@
-* {
-    margin: 0;
-    padding: 0;
-  }
-  
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: row;
-    height: 100vh;
+:root {
+    --primary: #f2eee9;
+    /* Custom primary color */
+    --primary-invert: #000000;
+    /* Inverted primary color for text */
 }
-#page {
+
+.wrapper {
     display: flex;
     flex-direction: column;
-    flex: 1;
     min-height: 100vh;
-  }
+}
 
-  header {
+.content-wrapper {
+    flex: 1;
+}
+
+.custom-header .navbar-burger {
+    height: 60px;
+}
+
+.custom-header.navbar {
     background-color: #f2eee9;
-    color: black;
-    text-align: center;
-    padding: 1em;
-    display: flex;
-    align-items: center;
-    justify-self: center;
-    position: relative;
-  }
-footer {
-    background-color: #f2eee9;
-    color: black;
-    text-align: center;
-    padding: 10px 0;
-  }
-
-.navbar-container {
-    display: flex;
-    align-items: center;
+    color: #d81616;
 }
 
-.navbar-brand {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: black;
+.navbar-start>.navbar-item {
+    color: #000000;
 }
 
-.navbar-icon {
-    height: 30px;
-    margin-right: 10px;
+.custom-header.navbar-item {
+    color: #000000;
 }
 
-.navbar-toggle {
-    background: none;
-    border: none;
-    cursor: pointer;
+.custom-header .navbar-item:hover {
+    background-color: rgba(7, 7, 7, 0.1);
+    color: #000000;
 }
 
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px;
-    width: 250px;
-    height: 100%;
-    background-color: #f2eee9;
-    color: black;
-    transition: left 0.3s;
-    z-index: 1000;
-    padding-top: 60px;
+.custom-header .navbar-burger span {
+    background-color: #000000;
 }
 
-.sidebar-menu {
-    list-style: none;
+.navbar-item img {
+    max-height: 90px;
+    height: 90px;
+    width: auto;
+}
+
+#brand-icon {
+    top: -10px;
     padding: 0;
-    margin: 0;
 }
 
-.sidebar-item {
-    padding: 15px 20px;
-}
-
-.sidebar-item a {
-    text-decoration: none;
-    color: black;
-}
-
-.close-btn {
+#brand-icon {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    color: black;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-.content {
-    padding: 20px;
-    margin-left: 0;
-    transition: margin-left 0.3s;
-}
-
-.sidebar-active {
-    left: 0;
-}
-
-@media (max-width: 768px) {
-    .content {
-        margin-left: 0;
-    }
-}
-
-.container {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-  }
-  
-  
-  main {
-    padding: 20px;
-    flex: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 860px;
-    margin: auto;
-
-  }
-  main2 {
-    display: flex;
-    justify-content: center;
-
-  }
-  main3 {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-  }
-  
-  main h1 {
-    padding: 10px;
-    font-family: "Bodoni Moda", serif;
-    text-transform: uppercase;
-    font-weight: lighter;
-  }
-  
-  main p {
-    padding: 10px;
-    font-family: "Lato", serif;
-    text-align: center;
-    margin: auto;
-    line-height: 1.6;
-  }
-  main3 p {
-    padding: 30px;
-    font-family: "Lato", serif;
-    text-align: center;
-    align-items: center;
-    max-width: 860px;
-    margin: auto;
-    line-height: 1.6;
-  }
-  main3 img {
-    margin: auto;
-    width: 400px;
-    height: 400px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 10px solid #f2eee9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-  }
-  
-  .main-image-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    height: 250px;
-    width: 550px;
-  }
-  
-  .main-image-container img {
-    width: 100%;
-  }
-  .spacer {
-    flex: 1;
-  }
-
-  
-  .company-name {
-    position:absolute;
     left: 50%;
     transform: translateX(-50%);
-      }
-.svg-icon {
-        width: 400px;
-        height: 400px;
+    color: var(--primary-invert);
+    font-size: 1.5rem;
+    text-align: center;
+    height: 75px;
+}
+
+.thin-footer {
+    background-color: #f2eee9;
+    padding: 1rem 1.5rem 1rem;
+}
+
+@media only screen and (max-width: 1000px) {
+    .navbar-menu {
+        display: block;
+        opacity: 0;
+        position: relative;
+        padding: 0;
+        left: 0;
+        right: 0;
+        max-height: 0px;
+        transition: all 0.4s ease-in-out;
+        pointer-events: none;
+        overflow: hidden;
     }
-.banner {
-  width: 950px;
-  height: 100%;
-  overflow: hidden;
 
+    .navbar-menu.is-active {
+        max-height: 200px;
+        padding: .5rem .75rem;
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+    }
 }
-.banner img {
-  width: 100%;
-  height: 90%;
-  object-fit: cover;
-  display: block;
 
+.banner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1.5rem;
 }
-.images {
-  display: flex;
+
+.banner-container img {
+    max-width: 100%;
+    height: auto;
 }
-.images img {
-  margin: 10px;
+
+.text-justify-center {
+    text-align: center;
+    max-width: 1200px;
 }
-.Onama {
-  font-family: Lato;
-  text-align: center;
+.text-justify-center:after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+}
+.text-justify-center p:last-child {
+    text-align: center;
+}
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.image .edukacija-img.is-rounded {
+    border-radius: 50%; /* Make the images fully round */
+    object-fit: cover; /* Ensure the image covers the container */
+    width: 400px;
+    height: 400px;
+}
+
+figure.is-rounded {
+    width: 400px; /* Set a fixed width */
+    height: 400px; /* Set a fixed height */
+    overflow: hidden;
+    border-radius: 50%; /* Make the figure element round */
+    border: 10px solid #f2eee9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-invert);
+}
+
+#navbarBasicExample {
+    background-color: #f2eee9;
 }

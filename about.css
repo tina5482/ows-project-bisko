@@ -1,0 +1,36 @@
+p.text {
+    text-align: center;
+    font-family: Lato;
+    max-width: 350px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    line-height: 1.6;
+  }
+
+  h4 {
+    font-family: Bodoni Moda;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .title{
+    padding: 20px;
+    font-family: "Bodoni Moda";
+    font-weight: lighter;
+  }
+  .scrollable-box {
+    display: flex;
+    overflow-x: auto;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+}
+.scrollable-box img {
+    height: 300px; /* Adjust the height as needed */
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.container-scroll {
+    max-width: 1600px;
+}
