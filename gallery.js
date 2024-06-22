@@ -1,4 +1,4 @@
-const galleryContainer = document.querySelector(".container");
+const galleryContainer = document.querySelector(".center-container");
 const popup = document.getElementById("popup");
 const popupImage = document.getElementById("popup-image");
 const closePopup = document.getElementById("close");
