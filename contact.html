@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="hr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Isabella</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="contact.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Isabella — Kontakt</title>
+
+  <!-- Bulma CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+  <!-- FullCalendar CSS (ispravan URL) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css">
+
+  <!-- Tvoji CSS-ovi (nakon frameworka) -->
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./contact.css">
 </head>
 
 <body>
@@ -38,69 +44,176 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
-        <div class="content-wrapper">
-            <section class="section">
-                <div class="container">
+    <!-- Main Content -->
+    <div class="content-wrapper">
+      <section class="section">
+        <div class="container">
 
-                    <div class="columns is-multiline">
-                        <div class="column is-half is-justify-content-center">
-                            <div class="card-image">
-                                <h2 class="title mb-3 mb-5">Kontakt i lokacija</h2>
-                                <p class="text">Ulica Pere Perića 2, Sukošan</p>
-                                <p class="text">+385 99 123 4567</p>
-                                <p class="text">beauty.isabella@gmail.com</p>
-                                <a ref="https://www.instagram.com/beauty.isabellla?igsh=MW1tNTN5YzBnc2pwMw==">@beauty.isabellla</a>
-                                <h2 class="title mb-3 mt-5">Radno vrijeme</h2>
-                                <p class="text">Pon - Pet: 08:00 - 20:00h // Sub: 08:00 - 14:00h</p>
-                                <h2 class="title mb-3 mt-5">Rezervacija termina</h2>
-                                <p class="long-text">Kako biste se naručili na željeni tretman te provjerili
-                                    dostupnost termina, molimo na nas kontaktirate direktno na telefon ili pošaljite
-                                    poruku putem upita</p>
-                            </div>
-                        </div>
-                        <div class="column is-half">
-                            <div class="notepad">
-                                <h1 class="title">Posaljite nam poruku</h1>
-                                <form id="contactForm">
-                                    <div class="field">
-                                        <label class="label" for="name"></label>
-                                        <div class="control">
-                                            <input class="input" type="text" id="name" name="name" placeholder="Ime">
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <label class="label" for="email"></label>
-                                        <div class="control">
-                                            <input class="input" id="email" name="email" placeholder="Email">
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <label class="label" for="message"></label>
-                                        <div class="control">
-                                            <textarea class="textarea" id="message" name="message" placeholder="Vasa poruka"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="control">
-                                        <button class="button is-primary" type="submit">Send</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-            </section>
-        </div>
+          <div class="columns is-multiline">
+            <!-- Lijevo: Info -->
+            <div class="column is-half is-justify-content-center">
+              <div class="card-image">
+                <h2 class="title mb-3 mb-5">Kontakt i lokacija</h2>
+                <p class="text">Ulica Pere Perića 2, Sukošan</p>
+                <p class="text">+385 99 123 4567</p>
+                <p class="text">beauty.isabella@gmail.com</p>
+                <a href="https://www.instagram.com/beauty.isabellla?igsh=MW1tNTN5YzBnc2pwMw==" target="_blank" rel="noopener">@beauty.isabellla</a>
 
-        <!-- Footer -->
-        <footer class="footer thin-footer">
-            <div class="has-text-centered">
-                <p>&copy; 2024 Biško. All rights reserved.</p>
+                <h2 class="title mb-3 mt-5">Radno vrijeme</h2>
+                <p class="text">Pon - Pet: 09:00-17:00 // Sub: 08:00 - 14:00h</p>
+
+                <h2 class="title mb-3 mt-5">Rezervacija termina</h2>
+                <p class="long-text">
+                  Rezervaciju termina možete napraviti online ili nas kontaktirati direktno.
+                </p>
+              </div>
             </div>
-        </footer>
+
+            <!-- Desno: Kontakt forma -->
+            <div class="column is-half">
+              <div class="notepad">
+                <h1 class="title">Pošaljite nam poruku</h1>
+                <form id="contactForm" autocomplete="on">
+                  <div class="field">
+                    <label class="label" for="name">Ime</label>
+                    <div class="control">
+                      <input class="input" type="text" id="name" name="name" placeholder="Ime" autocomplete="name" required>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label class="label" for="email">Email</label>
+                    <div class="control">
+                      <input class="input" type="email" id="email" name="email" placeholder="Email" autocomplete="email" inputmode="email" required>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <label class="label" for="message">Vaša poruka</label>
+                    <div class="control">
+                      <textarea class="textarea" id="message" name="message" placeholder="Vaša poruka" autocomplete="off" required></textarea>
+                    </div>
+                  </div>
+
+                  <div class="control">
+                    <button class="button is-primary" type="submit">Send</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- MODAL: Dostupni termini -->
+          <div id="slotsModal" class="modal">
+            <div class="modal-background"></div>
+            <div class="modal-card is-medium">
+              <!-- unutar headera slots modala -->
+              <header class="modal-card-head" style="display:flex; align-items:center; justify-content:space-between;">
+                <p class="modal-card-title" id="slotsHeader">Dostupni termini</p>
+                <div style="display:flex; gap:0.5rem; align-items:center;">
+                  <button id="slotsRefresh" class="button is-small is-light" type="button">Osvježi</button>
+                  <button class="delete" aria-label="close" id="slotsClose"></button>
+                </div>
+              </header>
+
+              <section class="modal-card-body">
+                <div class="content">
+                  <p id="slotsHeader" class="mb-3 has-text-weight-semibold"></p>
+
+                  <!-- Skeleton loader -->
+                  <div id="slotsSkeleton">
+                    <div class="skel-line" style="width: 60%"></div>
+                    <div class="skel-line" style="width: 40%"></div>
+                    <div class="skel-line" style="width: 80%"></div>
+                  </div>
+
+                  <!-- Empty state -->
+                  <div id="slotsEmpty" class="has-text-grey" style="display:none;">
+                    Nema slobodnih termina za odabrani dan.
+                  </div>
+
+                  <!-- Lista slotova -->
+                  <div id="slotsList" class=""></div>
+                </div>
+              </section>
+              <footer class="modal-card-foot">
+                <button class="button" id="slotsCancel">Zatvori</button>
+              </footer>
+            </div>
+          </div>
+
+          <!-- KALENDAR REZERVACIJA (ispod kolona) -->
+          <!-- ONLINE REZERVACIJA: odabir djelatnika i usluge -->
+          <div class="box mt-5">
+            <h2 class="title is-5 mb-4">Online rezervacija termina</h2>
+
+            <div class="field">
+              <label class="label" for="staffSelect">Djelatnik</label>
+              <div class="control">
+                <select id="staffSelect" class="select">
+                  <option value="">-- Odaberite djelatnika --</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label class="label" for="serviceSelect">Usluga</label>
+              <div class="control">
+                <select id="serviceSelect" class="select" disabled>
+                  <option value="">-- Odaberite uslugu --</option>
+                </select>
+              </div>
+            </div>
+
+            <p id="publicHint" class="has-text-grey">
+              Kliknite dan u kalendaru dolje da vidite slobodne termine.
+            </p>
+          </div>
+
+          <!-- KALENDAR REZERVACIJA (ispod selektora) -->
+          <div class="calendar-card mt-5">
+            <div id="calendar"></div>
+            <div id="daySlots" class="mt-4"></div>
+          </div>
+
+        </div>
+      </section>
     </div>
 
-    <script src="index.js"></script>
-    <script src="contact.js"></script>
+    <!-- MODAL: potvrda rezervacije -->
+    <div id="bookModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Potvrda rezervacije</p>
+          <button class="delete" aria-label="close" id="closeModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <div id="slotDetails" class="content"></div>
+          <div id="modalErr" class="has-text-danger" style="display:none;"></div>
+        </section>
+        <footer class="modal-card-foot">
+          <button id="confirmBtn" class="button is-primary">Rezerviraj</button>
+          <button class="button" id="cancelBtn">Otkaži</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer thin-footer">
+      <div class="has-text-centered">
+        <p>&copy; 2024 Biško. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <!-- Skripte: redoslijed je bitan -->
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <!-- Tvoji JS fileovi -->
+  <script src="./index.js"></script>
+  <script src="./contact.js"></script>
 </body>
 
 </html>
