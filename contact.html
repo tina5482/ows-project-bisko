@@ -84,14 +84,23 @@
                   <div class="field">
                     <label class="label" for="email">Email</label>
                     <div class="control">
-                      <input class="input" type="email" id="email" name="email" placeholder="Email" autocomplete="email" inputmode="email" required>
+                      <input class="input" type="email" id="email" name="email" placeholder="Email" autocomplete="email" inputmode="email"
+                        required>
                     </div>
                   </div>
-
+                  <div class="field">
+                    <label class="label" for="phone">Broj mobitela</label>
+                    <div class="control">
+                      <input class="input" type="tel" id="phone" name="phone" placeholder="091 123 4567" autocomplete="tel"
+                        inputmode="tel" required>
+                    </div>
+                  </div>
+                  
                   <div class="field">
                     <label class="label" for="message">Vaša poruka</label>
                     <div class="control">
-                      <textarea class="textarea" id="message" name="message" placeholder="Vaša poruka" autocomplete="off" required></textarea>
+                      <textarea class="textarea" id="message" name="message" placeholder="Vaša poruka" autocomplete="off"
+                        required></textarea>
                     </div>
                   </div>
 
@@ -118,7 +127,7 @@
 
               <section class="modal-card-body">
                 <div class="content">
-                  <p id="slotsHeader" class="mb-3 has-text-weight-semibold"></p>
+                  <p id="slotsSubHeader" class="mb-3 has-text-weight-semibold"></p>
 
                   <!-- Skeleton loader -->
                   <div id="slotsSkeleton">
@@ -179,24 +188,51 @@
       </section>
     </div>
 
-    <!-- MODAL: potvrda rezervacije -->
-    <div id="bookModal" class="modal">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">Potvrda rezervacije</p>
-          <button class="delete" aria-label="close" id="closeModal"></button>
-        </header>
-        <section class="modal-card-body">
-          <div id="slotDetails" class="content"></div>
-          <div id="modalErr" class="has-text-danger" style="display:none;"></div>
-        </section>
-        <footer class="modal-card-foot">
-          <button id="confirmBtn" class="button is-primary">Rezerviraj</button>
-          <button class="button" id="cancelBtn">Otkaži</button>
-        </footer>
+<!-- MODAL: potvrda rezervacije -->
+<div id="bookModal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Potvrda rezervacije</p>
+      <button class="delete" aria-label="close" id="closeModal"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Sažetak odabranog termina (popunjava JS) -->
+      <div id="slotDetails" class="content"></div>
+
+      <!-- Podaci klijenta -->
+      <div class="field">
+        <label class="label" for="custFullName">Ime i prezime</label>
+        <div class="control">
+          <input id="custFullName" name="custFullName" class="input" type="text" placeholder="npr. Ana Anić" required />
+        </div>
       </div>
-    </div>
+
+      <div class="field is-grouped">
+        <div class="control is-expanded">
+          <label class="label" for="custEmail">Email</label>
+          <input id="custEmail" name="custEmail" class="input" type="email" placeholder="npr. ana@email.com" required />
+        </div>
+        <div class="control is-expanded">
+          <label class="label" for="custPhone">Telefon (opcionalno)</label>
+          <input id="custPhone" name="custPhone" class="input" type="text" placeholder="091 123 4567" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="custNote">Napomena (opcionalno)</label>
+        <input id="custNote" name="custNote" class="input" type="text" placeholder="Npr. preferiram jutarnje termine" />
+      </div>
+
+      <p id="modalErr" class="help is-danger" style="display:none"></p>
+    </section>
+    <footer class="modal-card-foot">
+      <button id="confirmBtn" class="button is-primary">Rezerviraj</button>
+      <button class="button" id="cancelBtn">Otkaži</button>
+    </footer>
+  </div>
+</div>
+
 
     <!-- Footer -->
     <footer class="footer thin-footer">

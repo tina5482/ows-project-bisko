@@ -1,62 +1,31 @@
-// ==================== Kontakt forma (ostaje kao kod tebe) ====================
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("contactForm");
-  if (!form) return;
+// contact.js  — zamijeni cijeli file ovime
+"use strict";
 
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-    let isValid = true;
-
-    const name = document.getElementById("name");
-    const email = document.getElementById("email");
-    const message = document.getElementById("message");
-
-    [name, email, message].forEach((el) => el.classList.remove("invalid"));
-
-    const nameVal = (name.value || "").trim();
-    const emailVal = (email.value || "").trim().toLowerCase();
-    const msgVal = (message.value || "").trim();
-
-    if (!nameVal) {
-      name.classList.add("invalid");
-      isValid = false;
-    }
-    if (!emailVal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-      email.classList.add("invalid");
-      isValid = false;
-    }
-    if (!msgVal) {
-      message.classList.add("invalid");
-      isValid = false;
-    }
-
-    if (isValid) {
-      alert("Form submitted successfully");
-      // TODO: fetch(...) na backend za slanje poruke (ako želiš)
-    }
-  });
-});
-
-// ==================== Helperi ====================
+/* ========================= Helpers ========================= */
 const $ = (id) => document.getElementById(id);
-const fmtTime = (isoOrDate) => {
-  const d = typeof isoOrDate === "string" ? new Date(isoOrDate) : isoOrDate;
-  return d.toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit" });
-};
-// lokalni yyyy-MM-dd (bez UTC pomaka)
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+const SLOT_MINUTES = 30;
+
+// lokalni YYYY-MM-DD (bez timezone pomaka)
 const fmtDateIso = (d) => {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const da = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${da}`;
 };
-const SLOT_MINUTES = 30;
 
-// Vrati listu POČETAKA (ISO) koji imaju dovoljno uzastopnih 30-min slotova
+const fmtTime = (isoOrDate) => {
+  const d = typeof isoOrDate === "string" ? new Date(isoOrDate) : isoOrDate;
+  return d.toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit" });
+};
+
+// vrati startove (ISO) koji imaju dovoljno uzastopnih 30-min slotova
 function validStartsForDuration(freeSlots, requiredMinutes) {
   const need = Math.ceil((requiredMinutes || SLOT_MINUTES) / SLOT_MINUTES);
   if (!Array.isArray(freeSlots) || freeSlots.length === 0) return [];
 
+  // mapa: startMillis -> slot
   const byStart = new Map(
     freeSlots.map((s) => [new Date(s.start).getTime(), s])
   );
@@ -80,46 +49,48 @@ function validStartsForDuration(freeSlots, requiredMinutes) {
   return starts;
 }
 
-// ==================== API ====================
-const API_BASE = "https://localhost:7021/api";
+/* ========================= API ========================= */
+const API_BASE = "https://localhost:7021/api"; // <-- promijeni ako treba
+console.log("API_BASE =", API_BASE);
 
-const loadStaff = async () => {
-  const res = await fetch(`${API_BASE}/staff`, { cache: "no-store" });
-  if (!res.ok) throw new Error(await res.text());
-  return await res.json();
-};
+async function apiGetJson(url) {
+  console.log("GET", url);
+  const res = await fetch(url, { cache: "no-store" });
+  console.log("status", res.status);
+  if (!res.ok) throw new Error(await res.text().catch(() => res.statusText));
+  const data = await res.json();
+  console.log("data", data);
+  return data;
+}
 
-const loadServices = async (staffId) => {
-  const res = await fetch(`${API_BASE}/services?staffId=${staffId}`, {
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(await res.text());
-  return await res.json();
-};
-
-const fetchSlotsForDay = async (dateStr) => {
-  if (!state.staffId) return [];
-  const res = await fetch(
-    `${API_BASE}/slots?staffId=${
-      state.staffId
-    }&date=${dateStr}&nocache=${Date.now()}`,
-    { cache: "no-store" }
+const loadStaff = () => apiGetJson(`${API_BASE}/staff`);
+const loadServices = (staffId) =>
+  apiGetJson(`${API_BASE}/services?staffId=${staffId}`);
+const fetchSlotsForDay = (staffId, dateStr) =>
+  apiGetJson(
+    `${API_BASE}/slots?staffId=${staffId}&date=${dateStr}&nocache=${Date.now()}`
   );
-  if (!res.ok) throw new Error(await res.text());
-  return await res.json();
-};
 
-// BOOKING: pošalji početak + serviceId (backend zaključa potreban lanac)
-const postBookingByStart = async ({
+async function postBookingByStart({
   staffId,
   date,
-  startTime,
+  startTime, // "HH:mm"
   serviceId,
   fullName = null,
   email = null,
   phone = null,
-}) => {
-  const res = await fetch(`${API_BASE}/book-by-start`, {
+}) {
+  const url = `${API_BASE}/book-by-start`;
+  console.log("POST", url, {
+    staffId,
+    date,
+    startTime,
+    serviceId,
+    fullName,
+    email,
+    phone,
+  });
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -132,80 +103,134 @@ const postBookingByStart = async ({
       phone,
     }),
   });
-  if (res.ok) return { ok: true, ...(await res.json().catch(() => ({}))) };
-  return {
-    ok: false,
-    status: res.status,
-    message: await res.text().catch(() => "Greška pri rezervaciji."),
-  };
-};
+  const text = await res.text().catch(() => "");
+  let json = {};
+  try {
+    json = text ? JSON.parse(text) : {};
+  } catch {}
+  if (!res.ok) {
+    return {
+      ok: false,
+      status: res.status,
+      message: text || "Greška pri rezervaciji.",
+    };
+  }
+  return { ok: true, ...json };
+}
 
-// ==================== Global state ====================
+/* ========================= Global state ========================= */
 const state = {
   staff: [],
-  servicesByStaff: {}, // { [staffId]: Service[] }
+  servicesByStaff: {}, // { [staffId]: [{id,name,durationMin}, ...] }
   staffId: null,
   staffName: null,
   serviceId: null,
   selectedDateStr: null, // "yyyy-MM-dd"
-  selectedStartIso: null, // ISO za odabrani početak
+  selectedStartIso: null, // ISO of chosen start
   calendar: null,
 };
 
-// auto-refresh kontrola
 let slotsRefreshTimer = null;
 let isRefreshingSlots = false;
 
-// ==================== Toast ====================
+/* ========================= Toast ========================= */
 function showToast(message, isError = false) {
   const t = $("toast");
   if (!t) return;
   t.textContent = message;
-  t.classList.remove("error");
+  t.className = "toast"; // reset
   if (isError) t.classList.add("error");
   t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 2500);
 }
 
-// ==================== Slots modal render ====================
+/* ========================= Contact form (optional) ========================= */
+(function attachContactForm() {
+  const form = $("contactForm");
+  if (!form) return;
+  const nameEl = $("name");
+  const emailEl = $("email");
+  const messageEl = $("message");
+  const phoneEl = $("phone");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const nameVal = (nameEl?.value || "").trim();
+    const emailVal = (emailEl?.value || "").trim().toLowerCase();
+    const msgVal = (messageEl?.value || "").trim();
+    const phoneVal = phoneEl ? (phoneEl.value || "").trim() : "";
+
+    if (
+      !nameVal ||
+      !emailVal ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal) ||
+      !msgVal
+    ) {
+      showToast("Molimo ispunite ispravno polja forme.", true);
+      return;
+    }
+
+    const payload = {
+      fullName: nameVal,
+      email: emailVal,
+      phone: phoneVal || null,
+      subject: "Kontakt s weba",
+      body: msgVal,
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok)
+        throw new Error(await res.text().catch(() => "Greška pri slanju."));
+      showToast("Hvala! Poruka je zaprimljena.");
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      showToast("Nažalost, slanje nije uspjelo.", true);
+    }
+  });
+})();
+
+/* ========================= Slots modal ========================= */
 async function refreshSlotsInModal(silent = false) {
-  if (isRefreshingSlots) return; // spriječi preklapanje poziva
+  if (isRefreshingSlots) return;
   isRefreshingSlots = true;
 
-  const modal = $("slotsModal");
   const listWrap = $("slotsList");
   const header = $("slotsHeader");
+  const subHeader = $("slotsSubHeader");
   const empty = $("slotsEmpty");
   const skeleton = $("slotsSkeleton");
-  if (!modal || !listWrap || !header || !empty || !skeleton) {
+
+  if (!listWrap || !header || !subHeader || !empty || !skeleton) {
     isRefreshingSlots = false;
     return;
   }
 
   if (!state.staffId || !state.serviceId || !state.selectedDateStr) {
+    header.textContent = "Dostupni termini";
+    subHeader.textContent = "Odaberite djelatnika i uslugu.";
     listWrap.innerHTML = "";
     empty.style.display = "block";
-    header.textContent = "Odaberite djelatnika i uslugu";
     isRefreshingSlots = false;
     return;
   }
 
-  const svc = state.servicesByStaff[state.staffId]?.find(
-    (x) => x.id === state.serviceId
-  );
+  const svc =
+    state.servicesByStaff[state.staffId]?.find(
+      (x) => x.id === state.serviceId
+    ) || null;
   const durationMin = svc?.durationMin || SLOT_MINUTES;
 
-  header.innerHTML = `
-    <strong>${new Date(state.selectedDateStr).toLocaleDateString(
-      "hr-HR"
-    )}</strong>
-    · Djelatnik: ${state.staffName || "-"}
-    · Usluga: ${svc?.name || "-"} (${durationMin} min)
-    <button id="slotsRefresh" class="button is-small is-light" style="float:right;">Osvježi</button>
-  `;
-  document
-    .getElementById("slotsRefresh")
-    ?.addEventListener("click", () => refreshSlotsInModal(false));
+  header.textContent = "Dostupni termini";
+  subHeader.textContent =
+    `${new Date(state.selectedDateStr).toLocaleDateString("hr-HR")} · ` +
+    `Djelatnik: ${state.staffName || "-"} · ` +
+    `Usluga: ${svc?.name || "-"} (${durationMin} min)`;
 
   if (!silent) {
     empty.style.display = "none";
@@ -214,72 +239,75 @@ async function refreshSlotsInModal(silent = false) {
   }
 
   try {
-    const daySlots = await fetchSlotsForDay(state.selectedDateStr);
+    const daySlots = await fetchSlotsForDay(
+      state.staffId,
+      state.selectedDateStr
+    );
+    console.log("raw slots", daySlots);
     const starts = validStartsForDuration(daySlots, durationMin);
+    console.log("valid starts", starts);
 
     const render = () => {
       if (!silent) skeleton.style.display = "none";
+
       if (!starts || starts.length === 0) {
         empty.style.display = "block";
         listWrap.innerHTML = "";
-      } else {
-        empty.style.display = "none";
-        const html = starts
-          .map(
-            (
-              iso
-            ) => `<button class="button is-light is-medium slot-start" data-start="${iso}">
-                        ${fmtTime(iso)}
-                      </button>`
-          )
-          .join("");
-        listWrap.innerHTML = html;
-
-        listWrap.querySelectorAll("button.slot-start").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            state.selectedStartIso = btn.dataset.start;
-
-            const det = $("slotDetails");
-            if (det) {
-              const endDate = new Date(state.selectedStartIso);
-              endDate.setMinutes(endDate.getMinutes() + durationMin);
-              det.innerHTML = `
-                <p><strong>${state.staffName}</strong></p>
-                <p>${new Date(state.selectedDateStr).toLocaleDateString(
-                  "hr-HR"
-                )}
-                   · ${fmtTime(state.selectedStartIso)}–${fmtTime(endDate)}</p>
-                <p class="is-size-7 has-text-grey">Trajanje usluge: ${durationMin} min</p>`;
-            }
-            const me = $("modalErr");
-            if (me) me.style.display = "none";
-            openConfirmModal();
-          });
-        });
+        return;
       }
+
+      empty.style.display = "none";
+      listWrap.innerHTML = starts
+        .map(
+          (iso) => `
+            <button class="button is-light is-medium slot-start" data-start="${iso}">
+              ${fmtTime(iso)}
+            </button>`
+        )
+        .join("");
+
+      // click => open confirm
+      $$(".slot-start", listWrap).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.selectedStartIso = btn.dataset.start;
+
+          const det = $("slotDetails");
+          if (det) {
+            const endDate = new Date(state.selectedStartIso);
+            endDate.setMinutes(endDate.getMinutes() + durationMin);
+            det.innerHTML = `
+              <p><strong>${state.staffName}</strong></p>
+              <p>${new Date(state.selectedDateStr).toLocaleDateString("hr-HR")}
+                 · ${fmtTime(state.selectedStartIso)}–${fmtTime(endDate)}</p>
+              <p class="is-size-7 has-text-grey">Trajanje usluge: ${durationMin} min</p>`;
+          }
+          const me = $("modalErr");
+          if (me) me.style.display = "none";
+          openConfirmModal();
+        });
+      });
     };
 
-    if (silent) {
-      render();
-    } else {
-      setTimeout(render, 100);
-    }
+    silent ? render() : setTimeout(render, 100);
   } catch (e) {
+    console.error(e);
     if (!silent) {
       skeleton.style.display = "none";
       empty.style.display = "block";
     }
-    console.error(e);
     showToast("Greška pri dohvaćanju termina.", true);
   } finally {
     isRefreshingSlots = false;
   }
 }
 
-// ==================== Calendar ====================
+/* ========================= Calendar ========================= */
 function buildCalendar() {
   const el = $("calendar");
-  if (!el || typeof FullCalendar === "undefined") return;
+  if (!el || typeof FullCalendar === "undefined") {
+    console.warn("FullCalendar nije učitan ili #calendar ne postoji");
+    return;
+  }
 
   state.calendar = new FullCalendar.Calendar(el, {
     locale: "hr",
@@ -290,7 +318,7 @@ function buildCalendar() {
     validRange: (now) => ({ start: fmtDateIso(now) }),
     events: [],
     dateClick: async (info) => {
-      state.selectedDateStr = info.dateStr; // "yyyy-MM-dd"
+      state.selectedDateStr = info.dateStr; // već YYYY-MM-DD
       openSlotsModal();
       await refreshSlotsInModal(false);
     },
@@ -299,9 +327,15 @@ function buildCalendar() {
   state.calendar.render();
 }
 
-// ==================== Modali ====================
+/* ========================= Modals ========================= */
 function openSlotsModal() {
   $("slotsModal")?.classList.add("is-active");
+
+  // manual refresh
+  const btnRef = $("slotsRefresh");
+  if (btnRef) {
+    btnRef.onclick = () => refreshSlotsInModal(false);
+  }
 
   if (slotsRefreshTimer) clearInterval(slotsRefreshTimer);
   slotsRefreshTimer = setInterval(async () => {
@@ -313,7 +347,7 @@ function openSlotsModal() {
       state.selectedDateStr &&
       !isRefreshingSlots
     ) {
-      await refreshSlotsInModal(true); // silent refresh svakih 10s
+      await refreshSlotsInModal(true);
     }
   }, 10000);
 }
@@ -355,10 +389,26 @@ function wireModals() {
         }
         return;
       }
+
+      const fullName = ($("custFullName")?.value || "").trim();
+      const email = ($("custEmail")?.value || "").trim().toLowerCase();
+      const phone = ($("custPhone")?.value || "").trim();
+
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!fullName || !emailOk) {
+        if (err) {
+          err.textContent = !fullName
+            ? "Upišite ime i prezime."
+            : "Upišite ispravan email.";
+          err.style.display = "block";
+        }
+        return;
+      }
+
       confirm.classList.add("is-loading");
       confirm.disabled = true;
 
-      // "HH:mm"
+      // "HH:mm" from ISO
       const startHHmm = new Date(state.selectedStartIso).toLocaleTimeString(
         "hr-HR",
         {
@@ -373,9 +423,9 @@ function wireModals() {
         date: state.selectedDateStr,
         startTime: startHHmm,
         serviceId: state.serviceId,
-        fullName: null,
-        email: null,
-        phone: null,
+        fullName,
+        email,
+        phone,
       });
 
       confirm.classList.remove("is-loading");
@@ -399,7 +449,7 @@ function wireModals() {
   }
 }
 
-// ==================== Selektori ====================
+/* ========================= Selectors (staff/service) ========================= */
 async function initSelectors() {
   const staffSel = $("staffSelect");
   const svcSel = $("serviceSelect");
@@ -415,12 +465,13 @@ async function initSelectors() {
     staffSel.appendChild(opt);
   });
 
+  // kad promijeniš staff
   staffSel.addEventListener("change", async (e) => {
     state.staffId = parseInt(e.target.value || "0") || null;
     state.staffName =
       state.staff.find((x) => x.id === state.staffId)?.name || null;
 
-    // reset servisa i izbora
+    // reset usluge
     svcSel.innerHTML = '<option value="">-- Odaberite uslugu --</option>';
     svcSel.disabled = !state.staffId;
     state.serviceId = null;
@@ -436,6 +487,7 @@ async function initSelectors() {
       });
     }
 
+    // ako je modal već otvoren i postoji datum, osvježi listu
     if (
       $("slotsModal")?.classList.contains("is-active") &&
       state.selectedDateStr
@@ -444,6 +496,7 @@ async function initSelectors() {
     }
   });
 
+  // kad promijeniš uslugu
   svcSel.addEventListener("change", async () => {
     state.serviceId = parseInt(svcSel.value || "0") || null;
     if (
@@ -455,7 +508,7 @@ async function initSelectors() {
   });
 }
 
-// ==================== Bootstrap ====================
+/* ========================= Bootstrap ========================= */
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     await initSelectors();
@@ -467,14 +520,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// ==================== Refresh on window focus ====================
+// refresh kada se prozor vrati u fokus (ako je modal otvoren)
 window.addEventListener("focus", () => {
   if (
-    document.getElementById("slotsModal")?.classList.contains("is-active") &&
+    $("slotsModal")?.classList.contains("is-active") &&
     state.staffId &&
     state.serviceId &&
     state.selectedDateStr
   ) {
-    refreshSlotsInModal(true); // silent refresh kad se vratiš na browser
+    refreshSlotsInModal(true);
   }
 });
