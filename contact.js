@@ -24,7 +24,6 @@ function validStartsForDuration(freeSlots, requiredMinutes) {
   const need = Math.ceil((requiredMinutes || SLOT_MINUTES) / SLOT_MINUTES);
   if (!Array.isArray(freeSlots) || freeSlots.length === 0) return [];
 
-  // mapa: startMillis -> slot
   const byStart = new Map(
     freeSlots.map((s) => [new Date(s.start).getTime(), s])
   );
@@ -60,34 +59,25 @@ function isSameLocalDay(a, b) {
 }
 
 // filtrira startove prema pravilima:
-// - za prošle datume: nema slotova
-// - za buduće datume: sve prolazi
-// - za današnji datum: samo startovi >= (sada + leadMinutes)
 function applyLeadTimeFilter(starts, selectedDateStr, leadMinutes = 30) {
   if (!Array.isArray(starts) || starts.length === 0) return [];
 
   const now = new Date();
   const selectedDate = new Date(selectedDateStr + "T00:00:00");
 
-  // prošli datum -> nema ništa
   if (
     selectedDate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
   ) {
     return [];
   }
-
-  // budući datum -> sve
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  if (selectedDate > today) {
-    return starts;
-  }
+  if (selectedDate > today) return starts;
 
-  // današnji datum -> filtriraj po lead-timeu
   const minStart = new Date(now.getTime() + leadMinutes * 60000);
   return starts.filter((iso) => new Date(iso) >= minStart);
 }
 
-// praktični wrapper: prvo pronađe valjane početke po trajanju, zatim primijeni lead-time
+// praktični wrapper
 function filteredValidStarts(
   freeSlots,
   requiredMinutes,
@@ -294,15 +284,12 @@ async function refreshSlotsInModal(silent = false) {
       state.staffId,
       state.selectedDateStr
     );
-    console.log("raw slots", daySlots);
     const starts = filteredValidStarts(
       daySlots,
       durationMin,
       state.selectedDateStr,
       30
     );
-
-    console.log("valid starts", starts);
 
     const render = () => {
       if (!silent) skeleton.style.display = "none";
@@ -340,7 +327,7 @@ async function refreshSlotsInModal(silent = false) {
           }
           const me = $("modalErr");
           if (me) me.style.display = "none";
-          openConfirmModal();
+          openConfirmModal(); // <- modal se otvara PRAZAN (resetiramo ga u openConfirmModal)
         });
       });
     };
@@ -385,6 +372,28 @@ function buildCalendar() {
 }
 
 /* ========================= Modals ========================= */
+
+/* NOVO: helper koji briše sve vrijednosti u potvrđujućem modalu */
+function resetConfirmForm() {
+  ["custFullName", "custEmail", "custPhone", "custNote"].forEach((id) => {
+    const el = $(id);
+    if (el) {
+      el.value = "";
+      el.classList.remove("invalid");
+    }
+  });
+  const err = $("modalErr");
+  if (err) {
+    err.textContent = "";
+    err.style.display = "none";
+  }
+  const btn = $("confirmBtn");
+  if (btn) {
+    btn.classList.remove("is-loading");
+    btn.disabled = false;
+  }
+}
+
 function openSlotsModal() {
   $("slotsModal")?.classList.add("is-active");
 
@@ -408,6 +417,7 @@ function openSlotsModal() {
     }
   }, 10000);
 }
+
 function closeSlotsModal() {
   $("slotsModal")?.classList.remove("is-active");
   if (slotsRefreshTimer) {
@@ -415,11 +425,15 @@ function closeSlotsModal() {
     slotsRefreshTimer = null;
   }
 }
+
 function openConfirmModal() {
+  resetConfirmForm(); // <<<<< OVO JE KLJUČNO
   $("bookModal")?.classList.add("is-active");
 }
+
 function closeConfirmModal() {
   $("bookModal")?.classList.remove("is-active");
+  resetConfirmForm(); // reset i na zatvaranju
 }
 
 function wireModals() {
@@ -468,11 +482,7 @@ function wireModals() {
       // "HH:mm" from ISO
       const startHHmm = new Date(state.selectedStartIso).toLocaleTimeString(
         "hr-HR",
-        {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        }
+        { hour: "2-digit", minute: "2-digit", hour12: false }
       );
 
       const res = await postBookingByStart({
@@ -498,7 +508,7 @@ function wireModals() {
       }
 
       // Uspjeh
-      closeConfirmModal();
+      closeConfirmModal(); // zatvaranje + reset
       closeSlotsModal();
       showToast("Termin rezerviran ✅");
       state.selectedStartIso = null;
@@ -544,7 +554,6 @@ async function initSelectors() {
       });
     }
 
-    // ako je modal već otvoren i postoji datum, osvježi listu
     if (
       $("slotsModal")?.classList.contains("is-active") &&
       state.selectedDateStr
