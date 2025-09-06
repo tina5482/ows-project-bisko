@@ -8,7 +8,7 @@
   <!-- Bulma CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 
-  <!-- FullCalendar CSS (ispravan URL) -->
+  <!-- FullCalendar CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css">
 
   <!-- Tvoji CSS-ovi (nakon frameworka) -->
@@ -17,32 +17,30 @@
 </head>
 
 <body>
-    <div class="wrapper">
-        <!-- Header -->
-        <nav class="navbar custom-header" role="navigation" aria-label="main navigation">
-
-            <div class="navbar-brand">
-                <div>
-                    <a id="brand-icon" class="navbar-item" href="index.html">
-                        <img src="svg/Isabella.svg" alt="Beauty Isabella"> <!-- Replace with your SVG path -->
-                    </a>
-                </div>
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false"
-                    data-target="navbarBasicExample">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
-            </div>
-            <div id="navbarBasicExample" class="navbar-menu">
-                <div class="navbar-start">
-                    <a class="navbar-item" href="index.html">Početna</a>
-                    <a class="navbar-item" href="about.html">O meni</a>
-                    <a class="navbar-item" href="gallery.html">Galerija</a>
-                    <a class="navbar-item" href="contact.html">Kontakt</a>
-                </div>
-            </div>
-        </nav>
+  <div class="wrapper">
+    <!-- Header -->
+    <nav class="navbar custom-header" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <div>
+          <a id="brand-icon" class="navbar-item" href="index.html">
+            <img src="svg/Isabella.svg" alt="Beauty Isabella">
+          </a>
+        </div>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="index.html">Početna</a>
+          <a class="navbar-item" href="about.html">O meni</a>
+          <a class="navbar-item" href="gallery.html">Galerija</a>
+          <a class="navbar-item" href="contact.html">Kontakt</a>
+        </div>
+      </div>
+    </nav>
 
     <!-- Main Content -->
     <div class="content-wrapper">
@@ -64,7 +62,8 @@
 
                 <h2 class="title mb-3 mt-5">Rezervacija termina</h2>
                 <p class="long-text">
-                  Rezervaciju termina možete napraviti online ili nas kontaktirati direktno.
+                  Rezervaciju mozete napraviti online ili nam se javiti direktno.
+                  Rezervacija termina sluzi iskljucivo za demonstraciju fakultetskog rada i ne nudi stvarne usluge
                 </p>
               </div>
             </div>
@@ -84,23 +83,21 @@
                   <div class="field">
                     <label class="label" for="email">Email</label>
                     <div class="control">
-                      <input class="input" type="email" id="email" name="email" placeholder="Email" autocomplete="email" inputmode="email"
-                        required>
+                      <input class="input" type="email" id="email" name="email" placeholder="Email" autocomplete="email" inputmode="email" required>
                     </div>
                   </div>
+
                   <div class="field">
                     <label class="label" for="phone">Broj mobitela</label>
                     <div class="control">
-                      <input class="input" type="tel" id="phone" name="phone" placeholder="091 123 4567" autocomplete="tel"
-                        inputmode="tel" required>
+                      <input class="input" type="tel" id="phone" name="phone" placeholder="091 123 4567" autocomplete="tel" inputmode="tel" required>
                     </div>
                   </div>
-                  
+
                   <div class="field">
                     <label class="label" for="message">Vaša poruka</label>
                     <div class="control">
-                      <textarea class="textarea" id="message" name="message" placeholder="Vaša poruka" autocomplete="off"
-                        required></textarea>
+                      <textarea class="textarea" id="message" name="message" placeholder="Vaša poruka" autocomplete="off" required></textarea>
                     </div>
                   </div>
 
@@ -116,7 +113,6 @@
           <div id="slotsModal" class="modal">
             <div class="modal-background"></div>
             <div class="modal-card is-medium">
-              <!-- unutar headera slots modala -->
               <header class="modal-card-head" style="display:flex; align-items:center; justify-content:space-between;">
                 <p class="modal-card-title" id="slotsHeader">Dostupni termini</p>
                 <div style="display:flex; gap:0.5rem; align-items:center;">
@@ -151,35 +147,41 @@
             </div>
           </div>
 
-          <!-- KALENDAR REZERVACIJA (ispod kolona) -->
-          <!-- ONLINE REZERVACIJA: odabir djelatnika i usluge -->
-          <div class="box mt-5">
-            <h2 class="title is-5 mb-4">Online rezervacija termina</h2>
+          <!-- REZERVACIJA: selektori + kalendar u jednoj kartici -->
+          <div class="notepad booking-card mt-5" id="bookingCard">
+            <h2 class="title is-5 mb-3">Online rezervacija termina</h2>
 
-            <div class="field">
-              <label class="label" for="staffSelect">Djelatnik</label>
-              <div class="control">
-                <select id="staffSelect" class="select">
-                  <option value="">-- Odaberite djelatnika --</option>
-                </select>
+            <div class="booking-grid">
+              <div class="field">
+                <label class="label" for="staffSelect">Djelatnik</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="staffSelect">
+                      <option value="">-- Odaberite djelatnika --</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label" for="serviceSelect">Usluga</label>
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select id="serviceSelect" disabled>
+                      <option value="">-- Odaberite uslugu --</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="field">
-              <label class="label" for="serviceSelect">Usluga</label>
-              <div class="control">
-                <select id="serviceSelect" class="select" disabled>
-                  <option value="">-- Odaberite uslugu --</option>
-                </select>
-              </div>
-            </div>
 
-            <p id="publicHint" class="has-text-grey">
+            <p id="publicHint" class="has-text-grey mb-3">
               Kliknite dan u kalendaru dolje da vidite slobodne termine.
             </p>
-          </div>
 
-          <!-- KALENDAR REZERVACIJA (ispod selektora) -->
-          <div class="calendar-card mt-5">
+            <hr class="paper-divider">
+
+            <!-- KALENDAR je dio iste kartice -->
             <div id="calendar"></div>
             <div id="daySlots" class="mt-4"></div>
           </div>
@@ -188,59 +190,59 @@
       </section>
     </div>
 
-<!-- MODAL: potvrda rezervacije -->
-<div id="bookModal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Potvrda rezervacije</p>
-      <button class="delete" aria-label="close" id="closeModal"></button>
-    </header>
-    <section class="modal-card-body">
-      <!-- Sažetak odabranog termina (popunjava JS) -->
-      <div id="slotDetails" class="content"></div>
+    <!-- MODAL: potvrda rezervacije -->
+    <div id="bookModal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Potvrda rezervacije</p>
+          <button class="delete" aria-label="close" id="closeModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <!-- Sažetak odabranog termina (popunjava JS) -->
+          <div id="slotDetails" class="content"></div>
 
-      <!-- Podaci klijenta -->
-      <div class="field">
-        <label class="label" for="custFullName">Ime i prezime</label>
-        <div class="control">
-          <input id="custFullName" name="custFullName" class="input" type="text" placeholder="npr. Ana Anić" required />
-        </div>
+          <!-- Podaci klijenta -->
+          <div class="field">
+            <label class="label" for="custFullName">Ime i prezime</label>
+            <div class="control">
+              <input id="custFullName" name="custFullName" class="input" type="text" placeholder="npr. Ana Anić" required />
+            </div>
+          </div>
+
+          <div class="field is-grouped">
+            <div class="control is-expanded">
+              <label class="label" for="custEmail">Email</label>
+              <input id="custEmail" name="custEmail" class="input" type="email" placeholder="npr. ana@email.com" required />
+            </div>
+            <div class="control is-expanded">
+              <label class="label" for="custPhone">Telefon (opcionalno)</label>
+              <input id="custPhone" name="custPhone" class="input" type="text" placeholder="091 123 4567" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="custNote">Napomena (opcionalno)</label>
+            <input id="custNote" name="custNote" class="input" type="text" placeholder="Npr. preferiram jutarnje termine" />
+          </div>
+
+          <p id="modalErr" class="help is-danger" style="display:none"></p>
+        </section>
+        <footer class="modal-card-foot">
+          <button id="confirmBtn" class="button is-primary">Rezerviraj</button>
+          <button class="button" id="cancelBtn">Otkaži</button>
+        </footer>
       </div>
-
-      <div class="field is-grouped">
-        <div class="control is-expanded">
-          <label class="label" for="custEmail">Email</label>
-          <input id="custEmail" name="custEmail" class="input" type="email" placeholder="npr. ana@email.com" required />
-        </div>
-        <div class="control is-expanded">
-          <label class="label" for="custPhone">Telefon (opcionalno)</label>
-          <input id="custPhone" name="custPhone" class="input" type="text" placeholder="091 123 4567" />
-        </div>
-      </div>
-
-      <div class="field">
-        <label class="label" for="custNote">Napomena (opcionalno)</label>
-        <input id="custNote" name="custNote" class="input" type="text" placeholder="Npr. preferiram jutarnje termine" />
-      </div>
-
-      <p id="modalErr" class="help is-danger" style="display:none"></p>
-    </section>
-    <footer class="modal-card-foot">
-      <button id="confirmBtn" class="button is-primary">Rezerviraj</button>
-      <button class="button" id="cancelBtn">Otkaži</button>
-    </footer>
-  </div>
-</div>
-
+    </div>
 
     <!-- Footer -->
     <footer class="footer thin-footer">
       <div class="has-text-centered">
-        <p>&copy; 2024 Biško. All rights reserved.</p>
+        <p>&copy; 2024 Biško. Ova web stranica izrađena je isklučivo u svrhu fakultetkog prijekta.Svi sadržaji, uključujući rezervacije i kontakt forme, služe kao demonstracija funkcionalnosti i nemaju komercijalnu namjenu.</p>
       </div>
     </footer>
   </div>
+
   <div id="toast" class="toast"></div>
 
   <!-- Skripte: redoslijed je bitan -->
@@ -251,5 +253,4 @@
   <script src="./index.js"></script>
   <script src="./contact.js"></script>
 </body>
-
 </html>

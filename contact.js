@@ -1,4 +1,3 @@
-// contact.js  — zamijeni cijeli file ovime
 "use strict";
 
 /* ========================= Helpers ========================= */
@@ -47,6 +46,56 @@ function validStartsForDuration(freeSlots, requiredMinutes) {
     if (ok) starts.push(s.start);
   }
   return starts;
+}
+
+/* ===================== NOVO: lead-time filter ===================== */
+
+// vrati true ako su datumi (lokalno) isti kalendarski dan
+function isSameLocalDay(a, b) {
+  return (
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
+  );
+}
+
+// filtrira startove prema pravilima:
+// - za prošle datume: nema slotova
+// - za buduće datume: sve prolazi
+// - za današnji datum: samo startovi >= (sada + leadMinutes)
+function applyLeadTimeFilter(starts, selectedDateStr, leadMinutes = 30) {
+  if (!Array.isArray(starts) || starts.length === 0) return [];
+
+  const now = new Date();
+  const selectedDate = new Date(selectedDateStr + "T00:00:00");
+
+  // prošli datum -> nema ništa
+  if (
+    selectedDate < new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  ) {
+    return [];
+  }
+
+  // budući datum -> sve
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (selectedDate > today) {
+    return starts;
+  }
+
+  // današnji datum -> filtriraj po lead-timeu
+  const minStart = new Date(now.getTime() + leadMinutes * 60000);
+  return starts.filter((iso) => new Date(iso) >= minStart);
+}
+
+// praktični wrapper: prvo pronađe valjane početke po trajanju, zatim primijeni lead-time
+function filteredValidStarts(
+  freeSlots,
+  requiredMinutes,
+  selectedDateStr,
+  leadMinutes = 30
+) {
+  let starts = validStartsForDuration(freeSlots, requiredMinutes);
+  return applyLeadTimeFilter(starts, selectedDateStr, leadMinutes);
 }
 
 /* ========================= API ========================= */
@@ -186,7 +235,9 @@ function showToast(message, isError = false) {
       });
       if (!res.ok)
         throw new Error(await res.text().catch(() => "Greška pri slanju."));
-      showToast("Hvala! Poruka je zaprimljena.");
+      showToast(
+        "Pažnja! Ova rezervacija isključivo demonstiria rad web stranice u akademske svrhe i nije stvarna rezervacija."
+      );
       form.reset();
     } catch (err) {
       console.error(err);
@@ -244,7 +295,13 @@ async function refreshSlotsInModal(silent = false) {
       state.selectedDateStr
     );
     console.log("raw slots", daySlots);
-    const starts = validStartsForDuration(daySlots, durationMin);
+    const starts = filteredValidStarts(
+      daySlots,
+      durationMin,
+      state.selectedDateStr,
+      30
+    );
+
     console.log("valid starts", starts);
 
     const render = () => {
